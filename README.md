@@ -114,10 +114,10 @@
 
 3. **Set environment variables:**
    ```bash
-   heroku config:set NODE_ENV=production
-   heroku config:set API_KEY=your-secret-api-key
-   heroku config:set OLLAMA_BASE_URL=your-ollama-url
-   heroku config:set OLLAMA_DEFAULT_MODEL=deepseek-r1
+      NODE_ENV=production
+      API_KEY=your-secret-api-key
+      OLLAMA_BASE_URL=your-ollama-url
+      OLLAMA_DEFAULT_MODEL=deepseek-r1
    ```
 
 4. **Deploy:**
