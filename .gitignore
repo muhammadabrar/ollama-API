@@ -1,0 +1,15 @@
+node_modules
+
+.next
+
+.env
+node_modules
+
+
+englishTranslation.json
+
+NL_translation.json
+DE_translation.json
+.vercel
+
+s3.js
