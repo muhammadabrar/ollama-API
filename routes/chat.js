@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ollamaService = require('../../services/ollamaService');
+const ollamaService = require('../services/ollamaService');
 
 // POST /api/chat - Chat with Ollama
 router.post('/chat', async (req, res) => {
