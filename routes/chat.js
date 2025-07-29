@@ -15,7 +15,8 @@ router.post('/chat', async (req, res) => {
       });
     }
 
-    // Validate message format
+    // Validate message format and size
+    let totalContentLength = 0;
     for (const message of messages) {
       if (!message.role || !message.content) {
         return res.status(400).json({
@@ -23,7 +24,20 @@ router.post('/chat', async (req, res) => {
           message: 'Each message must have "role" and "content" fields'
         });
       }
+      
+      // Check content length (limit to 50KB per message to prevent timeouts)
+      if (message.content.length > 50000) {
+        return res.status(400).json({
+          error: 'Message too large',
+          message: 'Each message content must be less than 50KB'
+        });
+      }
+      
+      totalContentLength += message.content.length;
     }
+
+
+    console.log(`Processing chat request with ${messages.length} messages, total length: ${totalContentLength} chars`);
 
     const response = await ollamaService.chat(messages, model, stream);
     
@@ -52,6 +66,10 @@ router.post('/generate', async (req, res) => {
         message: 'Prompt is required and must be a string'
       });
     }
+
+
+
+    console.log(`Processing generate request with prompt length: ${prompt.length} chars`);
 
     const response = await ollamaService.generateResponse(prompt, model);
     

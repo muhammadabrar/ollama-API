@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const apiKeyAuth = require('./middleware/auth');
 const chatRoutes = require('./routes/chat');
+const ollamaService = require('./services/ollamaService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -30,6 +31,26 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
+});
+
+// Ollama health check endpoint (no auth required)
+app.get('/health/ollama', async (req, res) => {
+  try {
+    const models = await ollamaService.listModels();
+    res.json({
+      status: 'OK',
+      ollama: 'connected',
+      models: models.models?.length || 0,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: 'ERROR',
+      ollama: 'disconnected',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // API routes with authentication
@@ -58,6 +79,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Ollama API server running on port ${PORT}`);
   console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+  console.log(`🤖 Ollama health: http://localhost:${PORT}/health/ollama`);
   console.log(`🤖 Chat endpoint: http://localhost:${PORT}/api/chat`);
   console.log(`📋 Models endpoint: http://localhost:${PORT}/api/models`);
 });
