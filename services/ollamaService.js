@@ -4,21 +4,24 @@ class OllamaService {
   constructor() {
     this.baseURL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
     this.defaultModel = process.env.OLLAMA_DEFAULT_MODEL || 'deepseek-r1';
+    this.endpoint = process.env.OLLAMA_ENDPOINT || '/api/chat';
     // Increased timeout to 5 minutes for AI model responses
     this.timeout = parseInt(process.env.OLLAMA_TIMEOUT) || 300000; // 5 minutes default
   }
 
-  async chat(messages, model = null, stream = false) {
+  async chat(messages, model = null, stream = false, temperature = 0.7, max_tokens = 512) {
     try {
       const requestData = {
         model: model || this.defaultModel,
         messages: messages,
-        stream: stream
+        stream: stream,
+        temperature: temperature,
+        max_tokens: max_tokens
       };
 
-      console.log(`Making request to Ollama with model: ${model || this.defaultModel}, timeout: ${this.timeout}ms`);
+      console.log(`Making request to Ollama with model: ${model || this.defaultModel}, timeout: ${this.timeout}ms, temperature: ${temperature}, max_tokens: ${max_tokens}`);
 
-      const response = await axios.post(`${this.baseURL}/api/chat`, requestData, {
+      const response = await axios.post(`${this.baseURL}${this.endpoint}`, requestData, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -53,12 +56,25 @@ class OllamaService {
     }
   }
 
-  async generateResponse(prompt, model = null) {
+  async generateResponse(prompt, model = null, temperature = 0.7, max_tokens = 512) {
     const messages = [
       { role: 'user', content: prompt }
     ];
     
-    return await this.chat(messages, model);
+    return await this.chat(messages, model, false, temperature, max_tokens);
+  }
+
+  // New method to handle the complete request object format
+  async chatWithRequest(requestData) {
+    const {
+      model,
+      messages,
+      temperature = 0.7,
+      max_tokens = 512,
+      stream = false
+    } = requestData;
+
+    return await this.chat(messages, model, stream, temperature, max_tokens);
   }
 }
 
