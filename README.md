@@ -31,8 +31,8 @@
    PORT=3001
    NODE_ENV=production
    API_KEY=your-secret-api-key-here
-   OLLAMA_BASE_URL=http://your-ollama-server:11434
-   OLLAMA_DEFAULT_MODEL=deepseek-r1
+   BASE_URL=http://your-ollama-server:11434
+   DEFAULT_MODEL=deepseek-r1
    RATE_LIMIT_WINDOW_MS=900000
    RATE_LIMIT_MAX_REQUESTS=100
    ```

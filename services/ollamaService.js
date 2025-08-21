@@ -2,9 +2,9 @@ const axios = require('axios');
 
 class OllamaService {
   constructor() {
-    this.baseURL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-    this.defaultModel = process.env.OLLAMA_DEFAULT_MODEL || 'deepseek-r1';
-    this.endpoint = process.env.OLLAMA_ENDPOINT || '/api/chat';
+    this.baseURL = process.env.BASE_URL || 'http://localhost:11434';
+    this.defaultModel = process.env.DEFAULT_MODEL || 'deepseek-r1';
+    this.endpoint = process.env.ENDPOINT || '/api/chat';
     // Increased timeout to 5 minutes for AI model responses
     this.timeout = parseInt(process.env.OLLAMA_TIMEOUT) || 300000; // 5 minutes default
   }
